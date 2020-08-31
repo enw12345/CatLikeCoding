@@ -10,6 +10,7 @@ public class Fractal : MonoBehaviour
     private Material[,] materials;
 
     //Variables to control the max depth of our fractal
+    [Range(1, 7)]
     public int maxDepth;
     private int depth;
 
@@ -19,7 +20,7 @@ public class Fractal : MonoBehaviour
     private static Quaternion[] childOrientations = { Quaternion.identity, Quaternion.Euler(0f, 0f, -90f), Quaternion.Euler(0f, 0f, 90f), Quaternion.Euler(90f, 0f, 0f), Quaternion.Euler(-90f, 0f, 0f) };
 
     //Variables for manipulating our fractal
-    public float spawProbability;
+    public float spawnProbability;
     public float maxRotationSpeed;
     private float rotationSpeed;
     public float maxTwist;
@@ -32,6 +33,7 @@ public class Fractal : MonoBehaviour
         }
         rotationSpeed = Random.Range(-maxRotationSpeed, maxRotationSpeed);
         transform.Rotate(Random.Range(-maxTwist, maxTwist), 0f, 0f);
+
         //Create the mesh renderer
         gameObject.AddComponent<MeshFilter>().mesh = meshes[Random.Range(0, meshes.Length)];
         gameObject.AddComponent<MeshRenderer>().material = materials[depth, Random.Range(0, 2)];
@@ -51,7 +53,7 @@ public class Fractal : MonoBehaviour
         depth = parent.depth + 1;
         transform.parent = parent.transform;
 
-        spawProbability = parent.spawProbability;
+        spawnProbability = parent.spawnProbability;
         maxRotationSpeed = parent.maxRotationSpeed;
         maxTwist = parent.maxTwist;
         childScale = parent.childScale;
@@ -80,7 +82,7 @@ public class Fractal : MonoBehaviour
     {
         for (int i = 0; i < childDirections.Length; i++)
         {
-            if (Random.value * 100 < spawProbability)
+            if (Random.value * 100 < spawnProbability)
             {
                 yield return new WaitForSeconds(Random.Range(0.1f, 0.5f));
                 //Create children for the the object
